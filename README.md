@@ -2,12 +2,12 @@
 
 A simple world map for marking places you have visited or lived in. It works offline, and all your data stays on your own device.
 
-## Open the app
+## Starting out
 
-https://1qj.github.io/pinmap/
+Open up: https://1qj.github.io/pinmap/
+After the first visit, the application also works without internet (should at least). 
 
-## Install it as an app on a Mac
-
+You can save it to your device by doing as follows:
 - Safari (macOS Sonoma or newer): open the address, then choose File > Add to Dock.
 - Chrome: open the address, then use the three-dot menu > Cast, save and share > Install page as app.
 
