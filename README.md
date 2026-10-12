@@ -18,7 +18,6 @@ Install it on your device:
 ## How to use it
 
 - Search for a city in the search field, or tap the map to drop a pin.
-- Red pins mean "visited". Gold pins mean "lived there".
 - Zoom in close to see city names. Cities you have pinned always show their name.
 - "Places" lists all your pins. Select one to jump to it.
 - Use the flag buttons to switch between German and English.
