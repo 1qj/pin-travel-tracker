@@ -42,6 +42,10 @@
   --city: #8794a8;
   --city-text: #aab4c3;
   --halo: rgba(16, 20, 26, .78);
+  --c-red: #e5534b; --c-blue: #4f9cf0; --c-gold: #e8b53a; --c-green: #3fb96a; --c-purple: #a46cf0;
+  --land-red: #5b3135; --land-blue: #25405f; --land-gold: #614c1d; --land-green: #1f4d34; --land-purple: #46306b;
+  --k-visited: var(--c-red); --k-lived: var(--c-gold); --k-want: var(--c-blue);
+  --kl-visited: var(--land-red); --kl-lived: var(--land-gold); --kl-want: var(--land-blue);
   color-scheme: dark;
 }
 @media (prefers-color-scheme: light) {
@@ -51,6 +55,8 @@
     --land-edge: #aebbc9; --grid: #c4d2e0; --land-v: #f2c3be; --land-l: #f1dc9b; --red: #cf3a32;
     --gold: #d79a0f; --pin-edge: #ffffff; --red-text: #b3261e; --ring: #2d63b5; --scrim: rgba(20, 28, 40, .35);
     --city: #5b6b80; --city-text: #3f4f64; --halo: rgba(255, 255, 255, .8);
+    --c-red: #cf3a32; --c-blue: #2f77d0; --c-gold: #d79a0f; --c-green: #1f9d55; --c-purple: #8a4fd6;
+    --land-red: #f2c3be; --land-blue: #c3d9f5; --land-gold: #f1dc9b; --land-green: #bfe6cc; --land-purple: #dccaf3;
     color-scheme: light;
   }
 }
@@ -60,6 +66,8 @@
   --land-edge: #aebbc9; --grid: #c4d2e0; --land-v: #f2c3be; --land-l: #f1dc9b; --red: #cf3a32;
   --gold: #d79a0f; --pin-edge: #ffffff; --red-text: #b3261e; --ring: #2d63b5; --scrim: rgba(20, 28, 40, .35);
   --city: #5b6b80; --city-text: #3f4f64; --halo: rgba(255, 255, 255, .8);
+    --c-red: #cf3a32; --c-blue: #2f77d0; --c-gold: #d79a0f; --c-green: #1f9d55; --c-purple: #8a4fd6;
+    --land-red: #f2c3be; --land-blue: #c3d9f5; --land-gold: #f1dc9b; --land-green: #bfe6cc; --land-purple: #dccaf3;
   color-scheme: light;
 }
 
@@ -73,11 +81,14 @@ button, input, textarea { font: inherit; color: inherit; }
 
 .top { padding: 12px 16px 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; border-bottom: 1px solid var(--line); }
 h1 { margin: 0; font: 600 17px/1.2 var(--sans); letter-spacing: .01em; }
-.nav { display: flex; gap: 6px; }
-.stats { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 16px; font: 400 13px/1.3 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.nav { display: flex; gap: 6px; order: 3; flex-basis: 100%; }
+.nav .btn { flex: 1; }
+.stats { order: 4; flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 16px; font: 400 13px/1.3 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .stat { display: inline-flex; align-items: center; gap: 6px; }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--red); flex: none; }
-.dot.gold { background: var(--gold); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--k-visited); flex: none; }
+.dot.k-lived { background: var(--k-lived); }
+.dot.k-want { background: var(--k-want); }
+.cs { display: contents; }
 
 .btn { font: 500 14px/1.2 var(--sans); color: var(--fg); background: transparent; border: 1px solid var(--line-strong); border-radius: 8px; padding: 8px 12px; min-height: 38px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .btn:hover { background: var(--hover); }
@@ -91,13 +102,15 @@ h1 { margin: 0; font: 600 17px/1.2 var(--sans); letter-spacing: .01em; }
 .ocean { fill: var(--ocean); stroke: var(--land-edge); stroke-width: 1; vector-effect: non-scaling-stroke; }
 .grid { fill: none; stroke: var(--grid); stroke-width: .6; vector-effect: non-scaling-stroke; }
 .country { fill: var(--land); stroke: var(--land-edge); stroke-width: .6; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
-.country.v { fill: var(--land-v); }
-.country.l { fill: var(--land-l); }
+.country.t-visited { fill: var(--kl-visited); }
+.country.t-lived { fill: var(--kl-lived); }
+.country.t-want { fill: var(--kl-want); }
 
 .pin { cursor: pointer; }
 .pin .hit { fill: transparent; }
-.pin .body { fill: var(--red); stroke: var(--pin-edge); stroke-width: 1.3; stroke-linejoin: round; }
-.pin.lived .body { fill: var(--gold); }
+.pin .body { fill: var(--k-visited); stroke: var(--pin-edge); stroke-width: 1.3; stroke-linejoin: round; }
+.pin.k-lived .body { fill: var(--k-lived); }
+.pin.k-want .body { fill: var(--k-want); }
 .pin .hole { fill: var(--pin-edge); }
 .pin.sel .body { stroke: var(--fg); stroke-width: 2; }
 .pin.draft { animation: pulse 1.1s ease-in-out infinite; }
@@ -107,7 +120,7 @@ h1 { margin: 0; font: 600 17px/1.2 var(--sans); letter-spacing: .01em; }
 @media (prefers-reduced-motion: reduce) { .pin.draft { animation: none; } }
 .lbl { font: 500 11px var(--sans); fill: var(--fg); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; text-anchor: middle; pointer-events: none; }
 
-.lang { display: flex; gap: 6px; }
+.lang { display: flex; gap: 6px; order: 2; }
 .flag { width: 38px; height: 38px; padding: 0; border: 1px solid var(--line-strong); border-radius: 8px; background: transparent; display: grid; place-items: center; cursor: pointer; }
 .flag:hover { background: var(--hover); }
 .flag[aria-pressed="true"] { border-color: var(--fg); background: var(--hover); }
@@ -146,11 +159,26 @@ h3 { margin: 0; font: 600 14px/1.3 var(--sans); }
 .lab { display: block; margin-bottom: 4px; font: 500 12px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 input[type="text"], textarea { width: 100%; font: 400 16px/1.4 var(--sans); background: var(--field); border: 1px solid var(--line-strong); border-radius: 8px; padding: 9px 11px; }
 textarea { min-height: 78px; resize: vertical; }
-.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .seg label { position: relative; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: 8px; padding: 10px 11px; font: 500 14px/1.2 var(--sans); cursor: pointer; }
 .seg label.on { border-color: var(--fg); background: var(--hover); }
 .seg label:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
 .seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.seg label { padding: 10px 9px; font-size: 13.5px; }
+.seg label span { min-width: 0; overflow-wrap: anywhere; }
+.crow { display: grid; gap: 10px; padding: 14px 0; border-top: 1px solid var(--line); }
+.cl { display: flex; align-items: center; gap: 8px; }
+.cl .dot { width: 14px; height: 14px; }
+.cl .nm { font-weight: 500; }
+.cl .cur { margin-left: auto; color: var(--muted); font-size: 13px; }
+.sws { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer; box-shadow: inset 0 0 0 3px var(--panel); }
+.sw.c-red { background: var(--c-red); }
+.sw.c-blue { background: var(--c-blue); }
+.sw.c-gold { background: var(--c-gold); }
+.sw.c-green { background: var(--c-green); }
+.sw.c-purple { background: var(--c-purple); }
+.sw[aria-checked="true"] { border-color: var(--fg); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
 .actions .right { display: flex; gap: 8px; margin-left: auto; }
 
@@ -175,14 +203,14 @@ textarea { min-height: 78px; resize: vertical; }
     <nav class="nav" aria-label="Menu">
       <button class="btn" id="b-list" type="button" data-t="places">Places</button>
       <button class="btn" id="b-data" type="button" data-t="data">Data</button>
+      <button class="btn" id="b-colors" type="button" data-t="colors">Colors</button>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button class="flag" id="lang-de" type="button" aria-pressed="false" aria-label="Deutsch" title="Deutsch"><svg viewBox="0 0 5 3" preserveAspectRatio="none" aria-hidden="true"><rect width="5" height="1" fill="#000"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg></button>
       <button class="flag" id="lang-en" type="button" aria-pressed="true" aria-label="English" title="English"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="uk-a"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="uk-b"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#uk-a)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-b)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
     </div>
     <div class="stats" aria-live="polite">
-      <span class="stat"><i class="dot"></i><span><span id="n-v">0</span> <span data-t="visited">visited</span></span></span>
-      <span class="stat"><i class="dot gold"></i><span><span id="n-l">0</span> <span data-t="lived">lived</span></span></span>
+      <span class="cs" id="catstats"></span>
       <span class="stat"><span><span id="n-c">0</span> <span id="n-cl">countries</span></span></span>
     </div>
   </header>
@@ -196,7 +224,7 @@ textarea { min-height: 78px; resize: vertical; }
     <div class="notice" id="notice" hidden data-t="notice">This browser does not allow permanent storage here. Your pins will be lost when you close the page. Back them up under Data.</div>
     <div class="hint" id="hint">
       <span data-t-html="hint"><strong>Search for a city</strong> or tap the map to drop a pin. Pinch to zoom; city names appear when you zoom in close.</span>
-      <span class="legend"><span><i class="dot"></i><span data-t="visited">visited</span></span><span><i class="dot gold"></i><span data-t="livedThere">lived there</span></span></span>
+      <span class="legend" id="legend"></span>
     </div>
     <div class="zoomctl">
       <button class="zbtn" id="z-in" type="button" aria-label="Zoom in" data-t-aria="zoomIn">+</button>
@@ -238,7 +266,12 @@ textarea { min-height: 78px; resize: vertical; }
   try { var savedLang = localStorage.getItem(LANGKEY); if (savedLang === 'de' || savedLang === 'en') LANG = savedLang; } catch (e) {}
   var STR = {
     en: {
-      title: 'Pin Map', places: 'Places', data: 'Data', visited: 'visited', lived: 'lived', livedThere: 'lived there',
+      title: 'Pin Map', places: 'Places', data: 'Data', colors: 'Colors', colorsTitle: 'Pin colors',
+      colorsIntro: 'Choose a color for each kind of pin. A color can be used for one kind only; if you pick one that is already in use, the two kinds swap colors.',
+      colorsReset: 'Reset colors',
+      k_visited: 'Visited', k_lived: 'Lived there', k_want: 'Want to go',
+      s_visited: 'visited', s_lived: 'lived', s_want: 'want to go',
+      col_red: 'Red', col_blue: 'Blue', col_gold: 'Gold', col_green: 'Green', col_purple: 'Purple', visited: 'visited', lived: 'lived', livedThere: 'lived there',
       country1: 'country', countryN: 'countries', mapAria: 'World map. Tap to drop a pin.', searchPh: 'Search a city',
       notice: 'This browser does not allow permanent storage here. Your pins will be lost when you close the page. Back them up under Data.',
       hint: '<strong>Search for a city</strong> or tap the map to drop a pin. Pinch to zoom; city names appear when you zoom in close.',
@@ -249,7 +282,7 @@ textarea { min-height: 78px; resize: vertical; }
       placesTitle: 'Places', close: 'Close', noPins: 'No pins yet. Tap the map to drop your first one.',
       dataTitle: 'Data', dataIntro: 'Your pins live only in this browser on this device. Back them up regularly as a file, for example in iCloud Drive.',
       backUp: 'Back up', saveFile: 'Save as file', copyText: 'Copy as text', backupAria: 'Backup as text', restore: 'Restore',
-      restoreInfo: 'Adds pins from a backup. Existing pins stay unchanged.', chooseFile: 'Choose file', orPaste: 'Or paste text', importText: 'Import text',
+      restoreInfo: 'Adds pins from a backup. Existing pins stay unchanged. The pin colors are taken over only if you have not changed them yourself.', chooseFile: 'Choose file', orPaste: 'Or paste text', importText: 'Import text',
       lastBackup: 'Last backup: ', noBackup: 'No backup yet.', invalid: 'This is not a valid backup.', noPinsFound: 'No pins were found in this data.',
       nothing: 'Nothing to back up yet.', saved: 'Backup saved to your Downloads folder.', handed: 'Backup handed over.', cancelled: 'Cancelled.',
       fileFail: 'Saving as a file is not possible here. Use "Copy as text".',
@@ -258,7 +291,12 @@ textarea { min-height: 78px; resize: vertical; }
       imported: function (a, sk, bad) { return nf.format(a) + (a === 1 ? ' pin added' : ' pins added') + ', ' + nf.format(sk) + ' already present' + (bad ? ', ' + nf.format(bad) + ' unreadable' : '') + '.'; }
     },
     de: {
-      title: 'Pinkarte', places: 'Orte', data: 'Daten', visited: 'besucht', lived: 'gelebt', livedThere: 'dort gelebt',
+      title: 'Pinkarte', places: 'Orte', data: 'Daten', colors: 'Farben', colorsTitle: 'Pin-Farben',
+      colorsIntro: 'Wählen Sie für jede Art von Pin eine Farbe. Eine Farbe kann nur einer Art zugeordnet sein; wählen Sie eine bereits vergebene, tauschen die beiden Arten ihre Farben.',
+      colorsReset: 'Farben zurücksetzen',
+      k_visited: 'Besucht', k_lived: 'Dort gelebt', k_want: 'Möchte ich hin',
+      s_visited: 'besucht', s_lived: 'gelebt', s_want: 'möchte ich hin',
+      col_red: 'Rot', col_blue: 'Blau', col_gold: 'Gold', col_green: 'Grün', col_purple: 'Violett', visited: 'besucht', lived: 'gelebt', livedThere: 'dort gelebt',
       country1: 'Land', countryN: 'Länder', mapAria: 'Weltkarte. Tippen setzt eine Stecknadel.', searchPh: 'Stadt suchen',
       notice: 'Der Browser erlaubt hier kein dauerhaftes Speichern. Ihre Pins gehen beim Schließen verloren. Sichern Sie sie unter Daten.',
       hint: '<strong>Suchen Sie eine Stadt</strong> oder tippen Sie auf die Karte, um eine Stecknadel zu setzen. Mit zwei Fingern zoomen; Städte erscheinen erst bei starkem Zoom.',
@@ -269,7 +307,7 @@ textarea { min-height: 78px; resize: vertical; }
       placesTitle: 'Orte', close: 'Schließen', noPins: 'Noch keine Pins. Tippen Sie auf die Karte, um den ersten zu setzen.',
       dataTitle: 'Daten', dataIntro: 'Ihre Pins liegen nur in diesem Browser auf diesem Gerät. Sichern Sie sie regelmäßig als Datei, zum Beispiel in iCloud Drive.',
       backUp: 'Sichern', saveFile: 'Als Datei sichern', copyText: 'Als Text kopieren', backupAria: 'Sicherung als Text', restore: 'Wiederherstellen',
-      restoreInfo: 'Fügt Pins aus einer Sicherung hinzu. Vorhandene Pins bleiben unverändert.', chooseFile: 'Datei wählen', orPaste: 'Oder Text einfügen', importText: 'Text importieren',
+      restoreInfo: 'Fügt Pins aus einer Sicherung hinzu. Vorhandene Pins bleiben unverändert. Die Pin-Farben werden nur übernommen, wenn Sie sie nicht selbst geändert haben.', chooseFile: 'Datei wählen', orPaste: 'Oder Text einfügen', importText: 'Text importieren',
       lastBackup: 'Letzte Sicherung: ', noBackup: 'Es gibt noch keine Sicherung.', invalid: 'Das ist keine gültige Sicherung.', noPinsFound: 'In diesen Daten wurden keine Pins gefunden.',
       nothing: 'Es gibt noch nichts zu sichern.', saved: 'Sicherung im Ordner Downloads gespeichert.', handed: 'Sicherung übergeben.', cancelled: 'Abgebrochen.',
       fileFail: 'Speichern als Datei ist hier nicht möglich. Nutzen Sie „Als Text kopieren“.',
@@ -290,6 +328,7 @@ textarea { min-height: 78px; resize: vertical; }
     q('[data-t-aria]', function (el) { el.setAttribute('aria-label', t(el.getAttribute('data-t-aria'))); });
     $('lang-de').setAttribute('aria-pressed', LANG === 'de' ? 'true' : 'false');
     $('lang-en').setAttribute('aria-pressed', LANG === 'en' ? 'true' : 'false');
+    renderLegend();
   }
 
   /* ---------- Countries ---------- */
@@ -312,6 +351,29 @@ textarea { min-height: 78px; resize: vertical; }
   /* ---------- Storage ---------- */
   var pins = [];
   var storageOK = true;
+  var KINDS = ['visited', 'lived', 'want'];
+  var PALETTE = ['red', 'blue', 'gold', 'green', 'purple'];
+  var PRIO = ['lived', 'visited', 'want'];
+  var DEFAULT_COLORS = { visited: 'red', lived: 'gold', want: 'blue' };
+  var colors = { visited: 'red', lived: 'gold', want: 'blue' };
+  function sameColors(a, b) { return KINDS.every(function (k) { return a[k] === b[k]; }); }
+  function readColors(o) {
+    if (!o || typeof o !== 'object') return;
+    var n = {}, used = {};
+    for (var i = 0; i < KINDS.length; i++) {
+      var c = o[KINDS[i]];
+      if (PALETTE.indexOf(c) < 0 || used[c]) return;
+      used[c] = 1; n[KINDS[i]] = c;
+    }
+    colors = n;
+  }
+  function applyColors() {
+    var r = document.documentElement.style;
+    KINDS.forEach(function (k) {
+      r.setProperty('--k-' + k, 'var(--c-' + colors[k] + ')');
+      r.setProperty('--kl-' + k, 'var(--land-' + colors[k] + ')');
+    });
+  }
 
   function uid() {
     try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
@@ -324,7 +386,7 @@ textarea { min-height: 78px; resize: vertical; }
     return {
       id: p.id ? String(p.id) : uid(),
       name: String(p.name || '').slice(0, 80),
-      type: p.type === 'lived' ? 'lived' : 'visited',
+      type: KINDS.indexOf(p.type) >= 0 ? p.type : 'visited',
       when: String(p.when || '').slice(0, 60),
       note: String(p.note || '').slice(0, 2000),
       lat: lat, lon: lon,
@@ -337,6 +399,7 @@ textarea { min-height: 78px; resize: vertical; }
       if (raw) {
         var d = JSON.parse(raw);
         if (d && Array.isArray(d.pins)) pins = d.pins.map(norm).filter(Boolean);
+        if (d) readColors(d.colors);
       }
       localStorage.setItem(KEY + '.probe', '1');
       localStorage.removeItem(KEY + '.probe');
@@ -344,7 +407,7 @@ textarea { min-height: 78px; resize: vertical; }
   }
   function save() {
     try {
-      localStorage.setItem(KEY, JSON.stringify({ v: 1, pins: pins }));
+      localStorage.setItem(KEY, JSON.stringify({ v: 2, pins: pins, colors: colors }));
       storageOK = true;
     } catch (e) { storageOK = false; }
     $('notice').hidden = storageOK;
@@ -529,10 +592,10 @@ textarea { min-height: 78px; resize: vertical; }
     });
     var all = en.merge(sel);
     all.attr('class', function (d) {
-      return 'pin' + (d.type === 'lived' ? ' lived' : '') + (d.id === '__draft' ? ' draft' : '') + (d.id === selId ? ' sel' : '');
+      return 'pin k-' + d.type + (d.id === '__draft' ? ' draft' : '') + (d.id === selId ? ' sel' : '');
     });
     all.attr('aria-label', function (d) {
-      return (d.type === 'lived' ? t('lblLived') : t('lblVisited')) + (d.name || t('newPin'));
+      return t('k_' + d.type) + ': ' + (d.name || t('newPin'));
     });
     all.select('text.lbl').text(function (d) { return d.name; });
     all.order();
@@ -541,23 +604,29 @@ textarea { min-height: 78px; resize: vertical; }
     scheduleCities();
   }
   function refreshDerived() {
-    var st = {};
+    var st = {}, counted = {}, counts = { visited: 0, lived: 0, want: 0 };
     pins.forEach(function (p) {
+      counts[p.type]++;
       var c = pinCountry(p);
       if (!c) return;
-      if (p.type === 'lived') st[c] = 'l'; else if (st[c] !== 'l') st[c] = 'v';
+      if (!st[c] || PRIO.indexOf(p.type) < PRIO.indexOf(st[c])) st[c] = p.type;
+      if (p.type !== 'want') counted[c] = 1;
     });
-    countryPaths
-      .classed('v', function (d) { return st[d.properties.c] === 'v'; })
-      .classed('l', function (d) { return st[d.properties.c] === 'l'; });
-    var nv = 0, nl = 0, nc = Object.keys(st).length;
-    pins.forEach(function (p) { if (p.type === 'lived') nl++; else nv++; });
-    $('n-v').textContent = nf.format(nv);
-    $('n-l').textContent = nf.format(nl);
+    countryPaths.attr('class', function (d) { var v = st[d.properties.c]; return 'country' + (v ? ' t-' + v : ''); });
+    var nc = Object.keys(counted).length;
+    $('catstats').innerHTML = KINDS.map(function (k) {
+      return '<span class="stat"><i class="dot k-' + k + '"></i><span><span>' + nf.format(counts[k]) + '</span> <span>' + esc(t('s_' + k)) + '</span></span></span>';
+    }).join('');
     $('n-c').textContent = nf.format(nc);
     $('n-cl').textContent = nc === 1 ? t('country1') : t('countryN');
     $('hint').hidden = pins.length > 0 || !!draft || !!sheetMode;
     $('notice').hidden = storageOK;
+  }
+
+  function renderLegend() {
+    var el = $('legend');
+    if (!el) return;
+    el.innerHTML = KINDS.map(function (k) { return '<span><i class="dot k-' + k + '"></i><span>' + esc(t('k_' + k)) + '</span></span>'; }).join('');
   }
 
   /* ---------- Tap to place a pin ---------- */
@@ -653,8 +722,9 @@ textarea { min-height: 78px; resize: vertical; }
       '<form class="form" id="pform" autocomplete="off">' +
       '<div><label class="lab" for="f-name">Name</label><input id="f-name" type="text" maxlength="80"></div>' +
       '<div class="seg" role="radiogroup" aria-label="' + t('pinType') + '">' +
-      '<label id="l-visited"><input type="radio" name="ptype" value="visited"><i class="dot"></i>' + t('visitedL') + '</label>' +
-      '<label id="l-lived"><input type="radio" name="ptype" value="lived"><i class="dot gold"></i>' + t('livedL') + '</label>' +
+      KINDS.map(function (k) {
+        return '<label id="l-' + k + '"><input type="radio" name="ptype" value="' + k + '"><i class="dot k-' + k + '"></i><span>' + esc(t('k_' + k)) + '</span></label>';
+      }).join('') +
       '</div>' +
       '<div><label class="lab" for="f-when">' + t('dates') + '</label><input id="f-when" type="text" maxlength="60" placeholder="' + esc(t('datesPh')) + '"></div>' +
       '<div><label class="lab" for="f-note">' + t('note') + '</label><textarea id="f-note" maxlength="2000"></textarea></div>' +
@@ -672,8 +742,7 @@ textarea { min-height: 78px; resize: vertical; }
 
     function syncType() {
       var v = sheet.querySelector('input[name="ptype"]:checked').value;
-      $('l-visited').classList.toggle('on', v === 'visited');
-      $('l-lived').classList.toggle('on', v === 'lived');
+      KINDS.forEach(function (k) { $('l-' + k).classList.toggle('on', v === k); });
       return v;
     }
     sheet.querySelector('input[value="' + p.type + '"]').checked = true;
@@ -730,8 +799,8 @@ textarea { min-height: 78px; resize: vertical; }
     } else {
       html += '<ul class="list">' + items.map(function (p) {
         var c = countryAt(p.lat, p.lon);
-        var meta = [c ? cn(c) : '', p.when].filter(Boolean).join(' · ');
-        return '<li><button type="button" data-id="' + esc(p.id) + '"><i class="dot' + (p.type === 'lived' ? ' gold' : '') + '"></i><span class="nm">' + esc(p.name || t('unnamed')) + '</span>' + (meta ? '<span class="meta">' + esc(meta) + '</span>' : '') + '</button></li>';
+        var meta = [t('k_' + p.type), c ? cn(c) : '', p.when].filter(Boolean).join(' · ');
+        return '<li><button type="button" data-id="' + esc(p.id) + '"><i class="dot k-' + p.type + '"></i><span class="nm">' + esc(p.name || t('unnamed')) + '</span>' + (meta ? '<span class="meta">' + esc(meta) + '</span>' : '') + '</button></li>';
       }).join('') + '</ul>';
     }
     sheet.innerHTML = html;
@@ -749,6 +818,52 @@ textarea { min-height: 78px; resize: vertical; }
     });
   }
 
+  /* ---------- Colours per kind of pin ---------- */
+  function openColors() {
+    draft = null; selId = null;
+    showSheet('colors', t('colorsTitle'), true);
+    sheet.innerHTML =
+      '<div class="sh"><h2>' + t('colorsTitle') + '</h2><button class="btn" type="button" id="b-close">' + t('close') + '</button></div>' +
+      '<p>' + t('colorsIntro') + '</p>' +
+      KINDS.map(function (k) {
+        return '<div class="crow" data-k="' + k + '"><div class="cl"><i class="dot k-' + k + '"></i><span class="nm">' + esc(t('k_' + k)) + '</span><span class="cur"></span></div>' +
+          '<div class="sws" role="radiogroup" aria-label="' + esc(t('k_' + k)) + '">' + PALETTE.map(function (c) {
+            return '<button type="button" class="sw c-' + c + '" data-c="' + c + '" role="radio" aria-checked="false" aria-label="' + esc(t('col_' + c)) + '" title="' + esc(t('col_' + c)) + '"></button>';
+          }).join('') + '</div></div>';
+      }).join('') +
+      '<div class="row"><button class="btn" type="button" id="b-creset">' + t('colorsReset') + '</button></div>';
+
+    function paint() {
+      KINDS.forEach(function (k) {
+        var row = sheet.querySelector('.crow[data-k="' + k + '"]');
+        Array.prototype.forEach.call(row.querySelectorAll('.sw'), function (b) {
+          b.setAttribute('aria-checked', b.getAttribute('data-c') === colors[k] ? 'true' : 'false');
+        });
+        row.querySelector('.cur').textContent = t('col_' + colors[k]);
+      });
+    }
+    function changed() { applyColors(); save(); paint(); renderPins(); renderLegend(); }
+    Array.prototype.forEach.call(sheet.querySelectorAll('.crow'), function (row) {
+      var k = row.getAttribute('data-k');
+      Array.prototype.forEach.call(row.querySelectorAll('.sw'), function (b) {
+        b.addEventListener('click', function () {
+          var c = b.getAttribute('data-c');
+          if (colors[k] === c) return;
+          var other = KINDS.filter(function (o) { return o !== k && colors[o] === c; })[0];
+          if (other) colors[other] = colors[k];
+          colors[k] = c;
+          changed();
+        });
+      });
+    });
+    $('b-creset').addEventListener('click', function () {
+      colors = { visited: DEFAULT_COLORS.visited, lived: DEFAULT_COLORS.lived, want: DEFAULT_COLORS.want };
+      changed();
+    });
+    $('b-close').addEventListener('click', closeSheet);
+    paint();
+  }
+
   /* ---------- Data: back up and restore ---------- */
   var downloads = null;
   try {
@@ -762,7 +877,7 @@ textarea { min-height: 78px; resize: vertical; }
     return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
   }
   function exportText() {
-    return JSON.stringify({ app: 'pinkarte', version: 1, exported: new Date().toISOString(), pins: pins }, null, 2);
+    return JSON.stringify({ app: 'pinkarte', version: 2, exported: new Date().toISOString(), colors: colors, pins: pins }, null, 2);
   }
   function markExported() {
     try { localStorage.setItem(LAST, new Date().toISOString()); } catch (e) {}
@@ -786,7 +901,8 @@ textarea { min-height: 78px; resize: vertical; }
       if (have[n.id]) { skipped++; return; }
       have[n.id] = 1; pins.push(n); added++;
     });
-    save(); renderPins();
+    if (d && sameColors(colors, DEFAULT_COLORS)) { readColors(d.colors); applyColors(); }
+    save(); renderPins(); renderLegend();
     return t('imported')(added, skipped, bad);
   }
 
@@ -915,6 +1031,7 @@ textarea { min-height: 78px; resize: vertical; }
       }
     } else if (sheetMode === 'list') openList();
     else if (sheetMode === 'data') openData();
+    else if (sheetMode === 'colors') openColors();
     if (!resEl.hidden && qEl.value.trim().length >= 2) runSearch();
   }
   $('lang-de').addEventListener('click', function () { setLang('de'); });
@@ -923,12 +1040,14 @@ textarea { min-height: 78px; resize: vertical; }
   /* ---------- Controls ---------- */
   $('b-list').addEventListener('click', function () { if (sheetMode) closeSheet(); openList(); });
   $('b-data').addEventListener('click', function () { if (sheetMode) closeSheet(); openData(); });
+  $('b-colors').addEventListener('click', function () { if (sheetMode) closeSheet(); openColors(); });
   $('z-in').addEventListener('click', function () { svg.transition().duration(250).call(zoom.scaleBy, 1.8); });
   $('z-out').addEventListener('click', function () { svg.transition().duration(250).call(zoom.scaleBy, 1 / 1.8); });
   $('z-reset').addEventListener('click', function () { svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity); });
 
   /* ---------- Start ---------- */
   load();
+  applyColors();
   applyStatic();
   layout();
   renderPins();
