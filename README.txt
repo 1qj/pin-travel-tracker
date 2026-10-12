@@ -5,14 +5,11 @@ A simple world map for marking places you have visited or lived in. It works off
 ## Starting out
 
 Open up: https://1qj.github.io/pinmap/
-
 After the first visit, the application also works without internet (should at least). 
 
 You can save it to your device by doing as follows:
 - Safari (macOS Sonoma or newer): open the address, then choose File > Add to Dock.
 - Chrome: open the address, then use the three-dot menu > Cast, save and share > Install page as app.
-
-After the first visit, the app also works without internet (should at least). 
 
 ## How to use it
 
