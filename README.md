@@ -1,6 +1,6 @@
 # Pin Map
 
-A simple world map for marking places you have visited or lived in. It works offline, and all your data stays on your own device.
+A simple world map for marking places you have visited, lived in or want to go to. It works offline, and all your data stays on your own device.
 
 **Live app: [https://1qj.github.io/pinmap/](https://1qj.github.io/pinmap/)**
 
