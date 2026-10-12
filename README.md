@@ -1,4 +1,4 @@
-# Pin Map
+# Pin Map without giving up your data
 
 A simple world map for marking places you have visited, lived in or want to go to. It works offline, and all your data stays on your own device.
 
