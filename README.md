@@ -1,12 +1,12 @@
-# Pin Map
+# Pin Travel Tracker
 
 A simple world map for marking places you have visited or lived in. It works offline, and all your data stays on your own device.
 
-**Live app: [https://1qj.github.io/pinmap/](https://1qj.github.io/pinmap/)**
+**Live app: [https://1qj.github.io/pin-travel-tracker/](https://1qj.github.io/pin-travel-tracker/)**
 
 ## Getting started
 
-Open the app: [https://1qj.github.io/pinmap/](https://1qj.github.io/pinmap/)
+Open the app: [https://1qj.github.io/pin-travel-tracker/](https://1qj.github.io/pin-travel-tracker/)
 
 After the first visit, the app should also work without an internet connection.
 
