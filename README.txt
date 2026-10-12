@@ -5,6 +5,7 @@ A simple world map for marking places you have visited or lived in. It works off
 ## Starting out
 
 Open up: https://1qj.github.io/pinmap/
+
 After the first visit, the application also works without internet (should at least). 
 
 You can save it to your device by doing as follows:
