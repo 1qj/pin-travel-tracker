@@ -44,8 +44,8 @@
   --halo: rgba(16, 20, 26, .78);
   --c-red: #e5534b; --c-blue: #4f9cf0; --c-gold: #e8b53a; --c-green: #3fb96a; --c-purple: #a46cf0;
   --land-red: #5b3135; --land-blue: #25405f; --land-gold: #614c1d; --land-green: #1f4d34; --land-purple: #46306b;
-  --k-visited: var(--c-red); --k-lived: var(--c-gold); --k-want: var(--c-blue);
-  --kl-visited: var(--land-red); --kl-lived: var(--land-gold); --kl-want: var(--land-blue);
+  --k-visited: var(--c-green); --k-lived: var(--c-gold); --k-want: var(--c-red);
+  --kl-visited: var(--land-green); --kl-lived: var(--land-gold); --kl-want: var(--land-red);
   color-scheme: dark;
 }
 @media (prefers-color-scheme: light) {
@@ -81,8 +81,9 @@ button, input, textarea { font: inherit; color: inherit; }
 
 .top { padding: 12px 16px 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; border-bottom: 1px solid var(--line); }
 h1 { margin: 0; font: 600 17px/1.2 var(--sans); letter-spacing: .01em; }
-.nav { display: flex; gap: 6px; order: 3; flex-basis: 100%; }
-.nav .btn { flex: 1; }
+.tools { position: relative; order: 2; }
+.nav { position: absolute; right: 0; top: calc(100% + 6px); z-index: 25; min-width: 168px; display: flex; flex-direction: column; gap: 2px; padding: 6px; background: var(--panel); border: 1px solid var(--line-strong); border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, .28); }
+.nav .btn { justify-content: flex-start; border: 0; min-height: 36px; padding: 7px 12px; font-size: 14px; }
 .stats { order: 4; flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 16px; font: 400 13px/1.3 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .stat { display: inline-flex; align-items: center; gap: 6px; }
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--k-visited); flex: none; }
@@ -120,10 +121,11 @@ h1 { margin: 0; font: 600 17px/1.2 var(--sans); letter-spacing: .01em; }
 @media (prefers-reduced-motion: reduce) { .pin.draft { animation: none; } }
 .lbl { font: 500 11px var(--sans); fill: var(--fg); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; text-anchor: middle; pointer-events: none; }
 
-.lang { display: flex; gap: 6px; order: 2; }
+.lang { display: flex; gap: 6px; }
 .flag { width: 38px; height: 38px; padding: 0; border: 1px solid var(--line-strong); border-radius: 8px; background: transparent; display: grid; place-items: center; cursor: pointer; }
 .flag:hover { background: var(--hover); }
 .flag[aria-pressed="true"] { border-color: var(--fg); background: var(--hover); }
+.flag.gear svg { width: 20px; height: 20px; border-radius: 0; box-shadow: none; }
 .flag svg { display: block; width: 26px; height: 17px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .3); }
 .cities { pointer-events: none; }
 .city circle { fill: var(--city); stroke: var(--halo); stroke-width: 1; }
@@ -172,13 +174,13 @@ textarea { min-height: 78px; resize: vertical; }
 .cl .nm { font-weight: 500; }
 .cl .cur { margin-left: auto; color: var(--muted); font-size: 13px; }
 .sws { display: flex; flex-wrap: wrap; gap: 10px; }
-.sw { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer; box-shadow: inset 0 0 0 3px var(--panel); }
+.sw { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer; box-shadow: none; }
 .sw.c-red { background: var(--c-red); }
 .sw.c-blue { background: var(--c-blue); }
 .sw.c-gold { background: var(--c-gold); }
 .sw.c-green { background: var(--c-green); }
 .sw.c-purple { background: var(--c-purple); }
-.sw[aria-checked="true"] { border-color: var(--fg); }
+.sw[aria-checked="true"] { border-color: var(--fg); box-shadow: inset 0 0 0 3px var(--panel); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
 .actions .right { display: flex; gap: 8px; margin-left: auto; }
 
@@ -200,14 +202,17 @@ textarea { min-height: 78px; resize: vertical; }
 <div class="app">
   <header class="top">
     <h1 data-t="title">Pin Map</h1>
-    <nav class="nav" aria-label="Menu">
+    <div class="tools">
+    <div class="lang" role="group" aria-label="Language">
+      <button class="flag" id="lang-de" type="button" aria-pressed="false" aria-label="Deutsch" title="Deutsch"><svg viewBox="0 0 5 3" preserveAspectRatio="none" aria-hidden="true"><rect width="5" height="1" fill="#000"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg></button>
+      <button class="flag" id="lang-en" type="button" aria-pressed="true" aria-label="English" title="English"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="uk-a"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="uk-b"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#uk-a)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-b)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
+      <button class="flag gear" id="b-menu" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menu" data-t-aria="menu" data-t-title="menu" title="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </div>
+    <nav class="nav" id="menu" aria-label="Menu" data-t-aria="menu" hidden>
       <button class="btn" id="b-list" type="button" data-t="places">Places</button>
       <button class="btn" id="b-data" type="button" data-t="data">Data</button>
       <button class="btn" id="b-colors" type="button" data-t="colors">Colors</button>
     </nav>
-    <div class="lang" role="group" aria-label="Language">
-      <button class="flag" id="lang-de" type="button" aria-pressed="false" aria-label="Deutsch" title="Deutsch"><svg viewBox="0 0 5 3" preserveAspectRatio="none" aria-hidden="true"><rect width="5" height="1" fill="#000"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg></button>
-      <button class="flag" id="lang-en" type="button" aria-pressed="true" aria-label="English" title="English"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="uk-a"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="uk-b"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#uk-a)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-b)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
     </div>
     <div class="stats" aria-live="polite">
       <span class="cs" id="catstats"></span>
@@ -266,7 +271,7 @@ textarea { min-height: 78px; resize: vertical; }
   try { var savedLang = localStorage.getItem(LANGKEY); if (savedLang === 'de' || savedLang === 'en') LANG = savedLang; } catch (e) {}
   var STR = {
     en: {
-      title: 'Pin Map', places: 'Places', data: 'Data', colors: 'Colors', colorsTitle: 'Pin colors',
+      title: 'Pin Map', places: 'Places', data: 'Data', menu: 'Menu', colors: 'Colors', colorsTitle: 'Pin colors',
       colorsIntro: 'Choose a color for each kind of pin. A color can be used for one kind only; if you pick one that is already in use, the two kinds swap colors.',
       colorsReset: 'Reset colors',
       k_visited: 'Visited', k_lived: 'Lived there', k_want: 'Want to go',
@@ -291,7 +296,7 @@ textarea { min-height: 78px; resize: vertical; }
       imported: function (a, sk, bad) { return nf.format(a) + (a === 1 ? ' pin added' : ' pins added') + ', ' + nf.format(sk) + ' already present' + (bad ? ', ' + nf.format(bad) + ' unreadable' : '') + '.'; }
     },
     de: {
-      title: 'Pinkarte', places: 'Orte', data: 'Daten', colors: 'Farben', colorsTitle: 'Pin-Farben',
+      title: 'Pinkarte', places: 'Orte', data: 'Daten', menu: 'Menü', colors: 'Farben', colorsTitle: 'Pin-Farben',
       colorsIntro: 'Wählen Sie für jede Art von Pin eine Farbe. Eine Farbe kann nur einer Art zugeordnet sein; wählen Sie eine bereits vergebene, tauschen die beiden Arten ihre Farben.',
       colorsReset: 'Farben zurücksetzen',
       k_visited: 'Besucht', k_lived: 'Dort gelebt', k_want: 'Möchte ich hin',
@@ -326,6 +331,7 @@ textarea { min-height: 78px; resize: vertical; }
     q('[data-t-html]', function (el) { el.innerHTML = t(el.getAttribute('data-t-html')); });
     q('[data-t-ph]', function (el) { el.placeholder = t(el.getAttribute('data-t-ph')); });
     q('[data-t-aria]', function (el) { el.setAttribute('aria-label', t(el.getAttribute('data-t-aria'))); });
+    q('[data-t-title]', function (el) { el.title = t(el.getAttribute('data-t-title')); });
     $('lang-de').setAttribute('aria-pressed', LANG === 'de' ? 'true' : 'false');
     $('lang-en').setAttribute('aria-pressed', LANG === 'en' ? 'true' : 'false');
     renderLegend();
@@ -340,12 +346,35 @@ textarea { min-height: 78px; resize: vertical; }
     var w = bb[0][0], e = bb[1][0];
     return w <= e ? (lon >= w && lon <= e) : (lon >= w || lon <= e);
   }
+  // The coastline is simplified, so some coastal cities (New York, Lisbon, Venice ...) fall just
+  // outside every polygon. Fall back to the nearest country within about 33 km.
+  var NEAR_TOL = 0.3, nearCache = {};
+  function eachVertex(c, fn) {
+    if (typeof c[0] === 'number') fn(c);
+    else for (var i = 0; i < c.length; i++) eachVertex(c[i], fn);
+  }
+  function nearestCountry(lat, lon) {
+    var key = lat + ':' + lon;
+    if (key in nearCache) return nearCache[key];
+    var pt = [lon, lat], best = null, bd = NEAR_TOL * Math.PI / 180;
+    features.forEach(function (f) {
+      var bb = f.bb;
+      if (!inBB([[bb[0][0] - NEAR_TOL, bb[0][1] - NEAR_TOL], [bb[1][0] + NEAR_TOL, bb[1][1] + NEAR_TOL]], lon, lat)) return;
+      eachVertex(f.geometry.coordinates, function (v) {
+        if (Math.abs(v[1] - lat) > NEAR_TOL) return;
+        var d = d3.geoDistance(pt, v);
+        if (d < bd) { bd = d; best = f; }
+      });
+    });
+    nearCache[key] = best;
+    return best;
+  }
   function countryAt(lat, lon) {
     var pt = [lon, lat];
     for (var i = 0; i < features.length; i++) {
       if (inBB(features[i].bb, lon, lat) && d3.geoContains(features[i], pt)) return features[i];
     }
-    return null;
+    return nearestCountry(lat, lon);
   }
 
   /* ---------- Storage ---------- */
@@ -354,8 +383,8 @@ textarea { min-height: 78px; resize: vertical; }
   var KINDS = ['visited', 'lived', 'want'];
   var PALETTE = ['red', 'blue', 'gold', 'green', 'purple'];
   var PRIO = ['lived', 'visited', 'want'];
-  var DEFAULT_COLORS = { visited: 'red', lived: 'gold', want: 'blue' };
-  var colors = { visited: 'red', lived: 'gold', want: 'blue' };
+  var DEFAULT_COLORS = { visited: 'green', lived: 'gold', want: 'red' };
+  var colors = { visited: 'green', lived: 'gold', want: 'red' };
   function sameColors(a, b) { return KINDS.every(function (k) { return a[k] === b[k]; }); }
   function readColors(o) {
     if (!o || typeof o !== 'object') return;
@@ -631,6 +660,7 @@ textarea { min-height: 78px; resize: vertical; }
 
   /* ---------- Tap to place a pin ---------- */
   svg.on('click', function (ev) {
+    if (menuSwallow) return;
     if (Date.now() - lastZoomAt < 280) return;
     if (sheetMode && !(sheetMode === 'edit' && draft)) return;
     var m = d3.pointer(ev, svg.node());
@@ -1038,6 +1068,21 @@ textarea { min-height: 78px; resize: vertical; }
   $('lang-en').addEventListener('click', function () { setLang('en'); });
 
   /* ---------- Controls ---------- */
+  function setMenu(open) {
+    $('menu').hidden = !open;
+    $('b-menu').setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  $('b-menu').addEventListener('click', function (e) { e.stopPropagation(); setMenu($('menu').hidden); });
+  $('menu').addEventListener('click', function () { setMenu(false); });
+  var menuSwallow = false;
+  document.addEventListener('click', function (e) {
+    var m = $('menu');
+    if (m.hidden || m.contains(e.target) || $('b-menu').contains(e.target)) return;
+    setMenu(false);
+    menuSwallow = true;
+    setTimeout(function () { menuSwallow = false; }, 0);
+  }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('menu').hidden) { setMenu(false); $('b-menu').focus(); } });
   $('b-list').addEventListener('click', function () { if (sheetMode) closeSheet(); openList(); });
   $('b-data').addEventListener('click', function () { if (sheetMode) closeSheet(); openData(); });
   $('b-colors').addEventListener('click', function () { if (sheetMode) closeSheet(); openColors(); });
