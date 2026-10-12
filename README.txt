@@ -1,8 +1,29 @@
-Pin Map: offline app files
+# Pin Map
 
-1. Put all files of this folder into one GitHub repository (see the steps in the chat).
-2. Turn on GitHub Pages for that repository.
-3. Open the Pages address in Safari or Chrome and install it as an app.
+A simple world map for marking places you have visited or lived in. It works offline, and all your data stays on your own device.
 
-Your pins are stored only in the browser or app on your own computer. The files here contain no personal data.
-To publish a new version later: upload the changed files and change the number in sw.js (pinmap-v1 to pinmap-v2).
+## Open the app
+
+https://1qj.github.io/pinmap/
+
+## Install it as an app on a Mac
+
+- Safari (macOS Sonoma or newer): open the address, then choose File > Add to Dock.
+- Chrome: open the address, then use the three-dot menu > Cast, save and share > Install page as app.
+
+After the first visit, the app also works without internet (should at least). 
+
+## How to use it
+
+- Search for a city in the search field, or tap the map to drop a pin.
+- Red pins mean visited. Gold pins mean lived there.
+- Zoom in close to see city names. Cities you have pinned always show their name.
+- "Places" lists all your pins. Tap one to jump to it.
+- Use the flag buttons to switch between German and English.
+
+## Your data and backups
+
+- Pins are stored only in the browser or app on your device. Nothing is uploaded.
+- Under "Data", choose "Save as file" to download a backup (JSON file).
+- To restore, choose "Data" > "Choose file", or paste the text.
+- Never upload your backup file anywhere else. It contains your places and notes.
